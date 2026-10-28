@@ -373,12 +373,23 @@
         return;
       }
 
-      // NOTE: this only shows a success state locally. To actually receive
-      // submissions, connect this form to an email service or a WordPress
-      // form plugin (e.g. point the fetch below at your endpoint).
-      if (formWrap) formWrap.classList.add("hidden");
-      if (successBox) successBox.classList.remove("hidden");
-      form.reset();
+      // Envia para o PHP da hospedagem (enviar-lead.php), que manda o e-mail por SMTP.
+      var submitBtn = form.querySelector('[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+      fetch("enviar-lead.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(data)
+      }).then(function (r) {
+        if (!r.ok) throw new Error(String(r.status));
+        if (formWrap) formWrap.classList.add("hidden");
+        if (successBox) successBox.classList.remove("hidden");
+        form.reset();
+      }).catch(function () {
+        showError("termos", "Não foi possível enviar agora. Verifique sua conexão e tente novamente.");
+      }).then(function () {
+        if (submitBtn) submitBtn.disabled = false;
+      });
     });
 
     if (resetBtn) {

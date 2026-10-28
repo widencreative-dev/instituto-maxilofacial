@@ -1,1 +1,5 @@
 .DS_Store
+
+# Credenciais e leads que falharam no envio (ficam so no servidor)
+config.php
+leads-falhos.log

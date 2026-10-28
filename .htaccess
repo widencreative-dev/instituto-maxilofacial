@@ -1,0 +1,8 @@
+# Bloqueia acesso direto a arquivos internos do envio de leads
+<FilesMatch "^(config(\.example)?\.php|leads-falhos\.log)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^phpmailer/ - [F,L]
+</IfModule>
